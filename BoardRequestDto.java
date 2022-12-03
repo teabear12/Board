@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+//프론트에서 받아옴.
 public class BoardRequestDto {
     private String title;
     private String name;

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+//제일 기본인 생성자 어노테이션이다. 아무 인수가 없는 생성자를 셍성해준다.
 @NoArgsConstructor
 public class BoardResponseDto {
     private String title;

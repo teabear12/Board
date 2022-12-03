@@ -15,13 +15,13 @@ import lombok.NoArgsConstructor;
 public class Board extends Timestamped{
 
     @Id
+    //기본 키 생성을 데이터베이스에 위임하는 전략
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String name;
     private String password;
     private String contents;
-    private String day;
     //생성자
     public Board(BoardRequestDto requestDto) {
         this.title = requestDto.getTitle();
