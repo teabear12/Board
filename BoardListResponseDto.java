@@ -7,14 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class BoardListResponseDto extends ResponseDto {
-    static List<BoardResponseDto>boardList = new ArrayList<>();
-    //기본 생성자
-    public BoardListResponseDto() {
-        super("게시글 목록 조회 성공", HttpStatus.OK.value());
-    }
+public class BoardListResponseDto extends ResponseDto{
 
-    public static void addBoard(BoardResponseDto responseDto) {
-        boardList.add(responseDto);
+    List<BoardResponseDto> boardList = new ArrayList<>();
+
+    public BoardListResponseDto() {
+        super("전체 게시글 목록 조회", HttpStatus.OK.value());
+    }
+    //BoardList 에 넣어주는 코드
+    public void addBoard(BoardResponseDto ResponseDto) {
+        boardList.add(ResponseDto);
     }
 }

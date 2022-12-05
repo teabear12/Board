@@ -14,36 +14,30 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-//@RequiredArgsConstructor 가 무엇일까?
 @RequiredArgsConstructor
 public class BoardService {
-    //데이터 베이스와 소통하는 repository 연결
+
+    //
     private final BoardRepository boardRepository;
-
-
-
-    //컨트롤러로부터 requestDto 를 받아주는 부분
-    //서비스가 하는 역할
     @Transactional
-    public ResponseDto writeboard(BoardRequestDto requestDto) {
-        //1. requestDto 값들을 Board 라는 entity 에 넣어준다.
-        Board board = new Board(requestDto);
-        //2. Board 라는 entity 를 이용해서 데이터베이스에 값을 저장한다.
+    public ResponseDto postBoard(BoardRequestDto responseDto) {
+        //board 라는 entity 생성
+        Board board = new Board(responseDto);
+
+        //작성된 게시판 글의 정보 저장
         boardRepository.save(board);
-        //BoardController 에서도 ResponseDto 로 반환하기 때문에 ResponseDto 로 반환
-        //컨트롤러에게 응답값을 내려주는 부분 return 이 컨트롤러한테 다시 반환한다.
-        return new ResponseDto("글쓰기 완료", HttpStatus.OK.value());
+        //BoardController 에서도 ResponseDto 로 반환한다.
+        //200 출력
+        return new ResponseDto("게시글 작성 완료", HttpStatus.OK.value());
     }
 
     @Transactional
     public BoardListResponseDto getBoards() {
-        //BoardListResponseDto 에 BoardListResponseDto 생성자가 있고 그 생성자의 객체가 바로 밑에 코드이다.
         BoardListResponseDto boardListResponseDto = new BoardListResponseDto();
 
-        //ArrayList 를 이용하여 작성할 수도 있음.
         List<Board> boards = boardRepository.findAll();
         for (Board board : boards) {
-            BoardListResponseDto.addBoard(new BoardResponseDto(board));
+            boardListResponseDto.addBoard(new BoardResponseDto(board));
         }
         return boardListResponseDto;
     }
@@ -51,23 +45,29 @@ public class BoardService {
     @Transactional
     public BoardResponseDto getBoard(Long id) {
         Board board = boardRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("게시글을 찾을 수 없다")
+                () -> new RuntimeException("게시글을 조회할 수 없다.")
         );
-        return new BoardResponseDto(board);
+        return new BoardResponseDto();
     }
     @Transactional
-    public BoardResponseDto updateBoard(Long id, BoardRequestDto requestDto) {
+    public BoardResponseDto putBoard(Long id, BoardRequestDto requestDto) {
+        //orElseThrow 예외처리하는 기능 한번더 보기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         Board board = boardRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("강의를 찾을 수 없다")
+                // 데이터 베이스에 id 가 존재하지 않는 경우 에러처리
+                ()->new RuntimeException("게시글을 조회할 수 없다.")
         );
-        board.update(requestDto);
-
+        //equals board 와 requestDto 를 비교하는 코드!!!!!!!!!!!!!!!!!!!!!!!!
+        if (board.getPassword().equals(requestDto.getPassword())) {
+            board.update(requestDto);
+        }
+        //클라이언트에서 가지고 온 데이터를 update 라는 메소드를 사용하여 교체하였습니다.
+        //질문 업데이트는 save 가 필요없나요?
         return new BoardResponseDto(board);
     }
-    @Transactional
+
     public ResponseDto deleteBoard(Long id) {
         Board board = boardRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("강의를 찾을 수 없다")
+                ()->new RuntimeException("게시글을 조회할 수 없다.")
         );
         boardRepository.delete(board);
         return new ResponseDto("게시글 삭제 성공", HttpStatus.OK.value());

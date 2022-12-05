@@ -1,10 +1,11 @@
+//추상클래스 같은 클래스(부모 클래스로 공통된 코드 클래스)
 package com.sparta.basic_crud_10.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-//Serialize, Deserialize 관련 구글링 해보기
 @Getter
-//api table 의 {msg : "작성 완료", statusCode : int} 부분 변수 지정
+@NoArgsConstructor
 public class ResponseDto {
     private String msg;
     private int statusCode;
@@ -13,5 +14,4 @@ public class ResponseDto {
         this.msg = msg;
         this.statusCode = statusCode;
     }
-
 }

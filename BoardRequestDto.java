@@ -6,12 +6,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-//프론트에서 받아옴.
+@NoArgsConstructor//생성자
 public class BoardRequestDto {
     private String title;
+    private String comments;
     private String name;
     private String password;
-    private String contents;
-    private String day;
 }
